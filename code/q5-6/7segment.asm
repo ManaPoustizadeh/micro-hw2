@@ -23,9 +23,12 @@ RESET:
       out SPH, r16
       ldi r16, low(RAMEND)
       out SPL, r16
-      ldi r18, 0xff
+      ldi r18, 0xff ;for loop
+      ldi r19, 0xff ;for loop
+      ldi r20, 0x0b ;count for 10 numbers
       ldi r16, 0x7d
       out DDRB, r16
+      ldi ZH, high(BCDTo7seg)
       ; Reset Vector
       rjmp  Start
 
@@ -35,20 +38,43 @@ RESET:
 
 Start:
       ; Write your code here
-      ldi ZH, high(BCDTo7seg)
+      dec r20
+      breq end
       lpm r17, Z+
       out PORTB, r17
+      rjmp loop
       
-      ;lpm r17, Z+
-      ;out PORTB, r17
-      rjmp end
-Loop:
+loop:
+      nop
       dec r18
-      cpse r18, r19
-      rjmp  Loop
+      inc r18
+      nop
+      dec r18
+      inc r18
+      nop
+      dec r18
+      brne loop
+      
+      nop
+      dec r19
+      inc r19
+      nop
+      dec r19
+      inc r19
+      nop
+      dec r19
+      brne loop
+      
       ldi r18, 0xff
-      rjmp Start
+      nop
+      dec r18
+      inc r18
+      nop
+      dec r18
+      brne start
+      
 
 end:
       rjmp end
 ;====================================================================
+
